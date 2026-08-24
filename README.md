@@ -357,7 +357,6 @@ Part of the ClearBank AI initiative. See parent project for license details.
 
 - **NL2SqlGen-OKF-Agents** — Main SQL generation pipeline (uses this service)
 - **sql-service** — SQL execution microservice
-- **ak-db-service** — Database abstraction layer
 
 ---
 
