@@ -12,7 +12,7 @@ timestamp: 2026-07-21T09:00:00Z
 | Column               | Type      | Description                                                          |
 |----------------------|-----------|----------------------------------------------------------------------|
 | `loan_id`            | UUID      | Globally unique loan identifier.                                     |
-| `customer_id`        | UUID      | FK to [customers](./customers.md).                                   |
+| `customer_id`        | UUID      | FK to [bank_customers](./bank_customers.md).                          |
 | `loan_type`          | ENUM      | One of: `personal`, `home`, `auto`, `education`.                    |
 | `principal`          | DECIMAL   | Original sanctioned loan amount in USD.                             |
 | `outstanding_balance`| DECIMAL   | Remaining unpaid principal + accrued interest.                      |
@@ -25,7 +25,7 @@ timestamp: 2026-07-21T09:00:00Z
 # Business Rules
 
 - A customer with `kyc_status != 'verified'` cannot have a loan approved.
-  See [customers](./customers.md) and [KYC Renewal](../runbooks/kyc_renewal.md).
+  See [bank_customers](./bank_customers.md) and [KYC Renewal](../runbooks/kyc_renewal.md).
 - Loans transition to `delinquent` when **2 or more consecutive** EMI
   installments in [loan_payments](./loan_payments.md) are `overdue`.
 - Loans transition to `written_off` when they remain `delinquent` for
@@ -59,7 +59,7 @@ ORDER BY maturity_date ASC;
 
 # Related Concepts
 
-- [Customers](./customers.md)
+- [Bank Customers](./bank_customers.md)
 - [Loan Payments](./loan_payments.md)
 - [Flags](./flags.md)
 - [Loan Delinquency Rate](../metrics/loan_delinquency_rate.md)

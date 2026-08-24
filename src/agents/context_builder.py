@@ -94,7 +94,7 @@ class ContextBuilderAgent(BaseAgent):
         "Given raw OKF knowledge bundle content, distill a concise but complete "
         "system context that includes:\n"
         "  1. **Table schemas**: EXACT column names (with types, ENUM values)\n"
-        "  2. **Explicit JOIN paths**: e.g., 'Loans.customer_id → Customers.customer_id'\n"
+        "  2. **Explicit JOIN paths**: e.g., 'loans.customer_id → bank_customers.customer_id'\n"
         "  3. **Business rules and constraints** (status enums, thresholds, date ranges)\n"
         "  4. **Metric SQL formulas** if the section is Metrics\n"
         "  5. **Common queries** people ask (e.g., 'loan details with customer info')\n\n"

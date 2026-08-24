@@ -21,7 +21,7 @@ timestamp: 2026-07-21T09:00:00Z
 A loan is eligible for restructuring if:
 - `loan.status = 'delinquent'` for fewer than **90 days**.
 - The borrower has not had a previous restructuring on the same loan.
-- The customer's [KYC](../tables/customers.md) is `verified` or `pending`
+- The customer's [KYC](../tables/bank_customers.md) is `verified` or `pending`
   (not `rejected` or `blocked`).
 
 ## Steps

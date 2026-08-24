@@ -15,8 +15,8 @@ events, loan disbursements, EMI schedules, and compliance flag alerts.
 
 ## Tables
 
-- [customers](../tables/customers.md) — one row per onboarded customer
-- [accounts](../tables/accounts.md) — one row per bank account
+- [bank_customers](../tables/bank_customers.md) — one row per onboarded customer
+- [bank_accounts](../tables/bank_accounts.md) — one row per bank account
 - [transactions](../tables/transactions.md) — one row per financial event
 - [loans](../tables/loans.md) — one row per loan application/disbursement
 - [loan_payments](../tables/loan_payments.md) — one row per EMI installment

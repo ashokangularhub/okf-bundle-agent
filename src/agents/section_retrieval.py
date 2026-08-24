@@ -18,8 +18,8 @@ logger = logging.getLogger("okf_bundle.agents.section_retrieval")
 # Fallback file mappings if BundleNavigator fails
 SECTION_FILES: dict[str, list[str]] = {
     "Tables": [
-        "tables/customers.md",
-        "tables/accounts.md",
+        "tables/bank_customers.md",
+        "tables/bank_accounts.md",
         "tables/transactions.md",
         "tables/loans.md",
         "tables/loan_payments.md",

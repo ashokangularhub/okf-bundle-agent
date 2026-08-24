@@ -134,11 +134,11 @@ def _mock_llm(system: str, user: str, *, json_mode: bool) -> str | dict[str, Any
     if "context builder" in sl or ("context" in sl and "schema context" in sl):
         return (
             "# Schema Context (Mock)\n\n"
-            "**Tables:** customers, accounts, transactions, loans, loan_payments, flags\n\n"
+            "**Tables:** bank_customers, bank_accounts, transactions, loans, loan_payments, flags\n\n"
             "**Key columns:**\n"
-            "- customers: customer_id, full_name, email, kyc_status ∈ {verified,pending,expired,rejected}, "
+            "- bank_customers: customer_id, full_name, email, kyc_status ∈ {verified,pending,expired,rejected}, "
             "status ∈ {active,inactive,blacklisted}, created_at\n"
-            "- accounts: account_id, customer_id (FK), account_type ∈ {savings,checking,fixed_deposit}, "
+            "- bank_accounts: account_id, customer_id (FK), account_type ∈ {savings,checking,fixed_deposit}, "
             "balance, status ∈ {active,frozen,blocked,closed}\n"
             "- transactions: txn_id, customer_id (FK), account_id (FK), amount, type, "
             "status ∈ {completed,pending,failed,reversed}, txn_at\n"

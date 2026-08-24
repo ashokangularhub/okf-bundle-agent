@@ -99,8 +99,8 @@ curl -X POST http://localhost:8002/section-selection \
   "concept_count": 6,
   "concepts": [
     {
-      "concept_id": "tables/customers",
-      "title": "Customers",
+      "concept_id": "tables/bank_customers",
+      "title": "Bank Customers",
       "concept_type": "table",
       "description": "Customer master data for ClearBank retail banking",
       "resource": null,
@@ -108,15 +108,15 @@ curl -X POST http://localhost:8002/section-selection \
       "timestamp": "2025-01-20T10:30:00Z"
     },
     {
-      "concept_id": "tables/accounts",
-      "title": "Accounts",
+      "concept_id": "tables/bank_accounts",
+      "title": "Bank Accounts",
       "concept_type": "table",
       "description": "Deposit and savings accounts",
       "tags": ["core", "schema"],
       "timestamp": "2025-01-20T10:30:00Z"
     }
   ],
-  "content": "## Customers (type: table)\n\n---type: table\ntitle: Customers\n...\n\n---\n\n## Accounts (type: table)\n\n..."
+  "content": "## Bank Customers (type: table)\n\n---type: table\ntitle: Bank Customers\n...\n\n---\n\n## Bank Accounts (type: table)\n\n..."
 }
 ```
 
@@ -153,14 +153,14 @@ curl -X POST http://localhost:8002/section-retrieval \
 ```json
 {
   "query": "Show me all delinquent loans",
-  "okf_content": "## Customers (type: table)\n\n..."
+  "okf_content": "## Bank Customers (type: table)\n\n..."
 }
 ```
 
 **Response:** `200 OK`
 ```json
 {
-  "system_context": "# Schema Context\n\nTable: loans\n\nColumns:\n- loan_id (INTEGER, PK)\n- customer_id (INTEGER, FK)\n- status (TEXT): enum(active, delinquent, written_off, closed)\n- outstanding_balance (DECIMAL)\n\nJOINs:\n- loans.customer_id → customers.customer_id\n\nBusiness Rules:\n- delinquent loans have status='delinquent'\n- query only active and delinquent loans\n\n..."
+  "system_context": "# Schema Context\n\nTable: loans\n\nColumns:\n- loan_id (INTEGER, PK)\n- customer_id (INTEGER, FK)\n- status (TEXT): enum(active, delinquent, written_off, closed)\n- outstanding_balance (DECIMAL)\n\nJOINs:\n- loans.customer_id → bank_customers.customer_id\n\nBusiness Rules:\n- delinquent loans have status='delinquent'\n- query only active and delinquent loans\n\n..."
 }
 ```
 

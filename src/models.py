@@ -71,13 +71,13 @@ class SectionRetrievalResponse(BaseModel):
                 "concept_count": 2,
                 "concepts": [
                     {
-                        "concept_id": "tables/customers",
-                        "title": "Customers",
+                        "concept_id": "tables/bank_customers",
+                        "title": "Bank Customers",
                         "concept_type": "table",
                         "description": "Customer master data"
                     }
                 ],
-                "content": "## Customers (type: table)\n\n..."
+                "content": "## Bank Customers (type: table)\n\n..."
             }
         }
 

@@ -12,7 +12,7 @@ timestamp: 2026-07-21T09:00:00Z
 | Column                | Type      | Description                                                        |
 |-----------------------|-----------|--------------------------------------------------------------------|
 | `txn_id`              | UUID      | Globally unique transaction identifier.                            |
-| `account_id`          | UUID      | FK to [accounts](./accounts.md).                                   |
+| `account_id`          | UUID      | FK to [bank_accounts](./bank_accounts.md).                            |
 | `txn_type`            | ENUM      | One of: `credit`, `debit`, `transfer`.                             |
 | `amount`              | DECIMAL   | Transaction amount in USD. Always positive.                        |
 | `status`              | ENUM      | One of: `pending`, `completed`, `failed`, `reversed`.             |
@@ -58,7 +58,7 @@ LIMIT 20;
 
 # Related Concepts
 
-- [Accounts](./accounts.md)
+- [Bank Accounts](./bank_accounts.md)
 - [Flags](./flags.md)
 - [AML Alert Investigation](../runbooks/aml_alert_investigation.md)
 - [Transaction Success Rate](../metrics/transaction_success_rate.md)

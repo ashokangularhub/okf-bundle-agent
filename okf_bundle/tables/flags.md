@@ -23,7 +23,7 @@ timestamp: 2026-07-21T09:00:00Z
 # Business Rules
 
 - `critical` severity flags on a `customer` entity automatically set the
-  customer's `status = blocked` and freeze all linked [accounts](./accounts.md).
+  customer's `status = blocked` and freeze all linked [bank accounts](./bank_accounts.md).
 - `aml` flags must be reviewed within **72 hours** of being raised per
   regulatory SLA. See [AML Alert Investigation](../runbooks/aml_alert_investigation.md).
 - `fraud` flags with `critical` severity must be reviewed within **24 hours**.
@@ -59,7 +59,7 @@ ORDER BY hours_open DESC;
 
 # Related Concepts
 
-- [Customers](./customers.md)
-- [Accounts](./accounts.md)
+- [Bank Customers](./bank_customers.md)
+- [Bank Accounts](./bank_accounts.md)
 - [Transactions](./transactions.md)
 - [AML Alert Investigation](../runbooks/aml_alert_investigation.md)

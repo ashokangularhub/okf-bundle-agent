@@ -124,7 +124,7 @@ async def classify_section(req: SectionSelectionRequest) -> SectionSelectionResp
     Classify a user query to determine which OKF section it belongs to.
 
     Routes queries as:
-    - **Tables**: SQL data queries (customers, accounts, transactions, loans, payments, flags)
+    - **Tables**: SQL data queries (bank_customers, bank_accounts, transactions, loans, payments, flags)
     - **Metrics**: KPI computations (delinquency rate, NPA ratio, transaction success, KYC completion)
     - **Runbooks**: Operational procedures (AML investigation, loan restructuring, KYC renewal)
     - **Datasets**: Database/storage metadata and retention policies
@@ -216,14 +216,14 @@ async def retrieve_section(req: SectionRetrievalRequest) -> SectionRetrievalResp
             "concept_count": 6,
             "concepts": [
                 {
-                    "concept_id": "tables/customers",
-                    "title": "Customers",
+                    "concept_id": "tables/bank_customers",
+                    "title": "Bank Customers",
                     "concept_type": "table",
                     "description": "Customer master data",
                     "tags": ["schema", "core"]
                 }
             ],
-            "content": "## Customers...\n\n---\n\n## Accounts..."
+            "content": "## Bank Customers...\n\n---\n\n## Bank Accounts..."
         }
         ```
     """
@@ -303,7 +303,7 @@ async def build_context(req: ContextBuilderRequest) -> ContextBuilderResponse:
         POST /context-building
         {
             "query": "Show delinquent loans",
-            "okf_content": "## Tables\n\n**Customers**..."
+            "okf_content": "## Tables\n\n**Bank Customers**..."
         }
 
         Response:

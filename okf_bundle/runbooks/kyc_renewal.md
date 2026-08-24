@@ -10,7 +10,7 @@ timestamp: 2026-07-21T09:00:00Z
 
 ## When Is This Runbook Triggered?
 
-1. A [customer](../tables/customers.md) has `kyc_status = 'expired'`
+1. A [customer](../tables/bank_customers.md) has `kyc_status = 'expired'`
    (KYC documents older than 2 years).
 2. A customer has `kyc_status = 'rejected'` after initial or previous
    verification attempt.
@@ -28,7 +28,7 @@ timestamp: 2026-07-21T09:00:00Z
 | Open new account            | No                                       |
 
 After **30 days** of `kyc_status = 'expired'` without renewal,
-all linked [accounts](../tables/accounts.md) are set to `frozen`.
+all linked [accounts](../tables/bank_accounts.md) are set to `frozen`.
 
 ## Steps
 
@@ -51,14 +51,14 @@ Customer submits updated KYC documents via the mobile app or branch:
   Manual review SLA: **48 hours**.
 
 ### Step 4: Decision
-- **Verified**: Update [customer](../tables/customers.md) `kyc_status = 'verified'`.
+- **Verified**: Update [customer](../tables/bank_customers.md) `kyc_status = 'verified'`.
   Unfreeze linked accounts (`status = 'active'`). Close the `kyc_expired` flag.
 - **Rejected**: Update `kyc_status = 'rejected'`. Customer may appeal within
   30 days with alternative documents. After 2 rejections, escalate to the
   compliance team for potential account closure.
 
 ### Step 5: Record Update
-- Set [customer](../tables/customers.md) `kyc_status` appropriately.
+- Set [customer](../tables/bank_customers.md) `kyc_status` appropriately.
 - Resolve the [flag](../tables/flags.md) (`status = 'resolved'` or `'false_positive'`).
 - If accounts were frozen, restore to `status = 'active'`.
 - Log the verification outcome and document references in the audit system.
@@ -71,7 +71,7 @@ Customer submits updated KYC documents via the mobile app or branch:
 
 ## Related
 
-- [Customers Table](../tables/customers.md)
-- [Accounts Table](../tables/accounts.md)
+- [Bank Customers Table](../tables/bank_customers.md)
+- [Bank Accounts Table](../tables/bank_accounts.md)
 - [Flags Table](../tables/flags.md)
 - [KYC Completion Rate](../metrics/kyc_completion_rate.md)

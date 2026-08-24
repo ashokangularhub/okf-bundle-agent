@@ -1,9 +1,9 @@
 ---
 type: Table
-title: Customers
+title: Bank Customers
 description: One row per onboarded bank customer. Contains KYC status, risk tier, and identity information.
-resource: postgresql://core-db.clearbank.internal:5432/retail_bank/public.customers
-tags: [customers, kyc, PII, onboarding, compliance]
+resource: postgresql://core-db.clearbank.internal:5432/retail_bank/public.bank_customers
+tags: [bank_customers, kyc, PII, onboarding, compliance]
 timestamp: 2026-07-21T09:00:00Z
 ---
 
@@ -39,7 +39,7 @@ timestamp: 2026-07-21T09:00:00Z
 **Customers with expired KYC:**
 ```sql
 SELECT customer_id, first_name, last_name, kyc_status, onboarded_at
-FROM customers
+FROM bank_customers
 WHERE kyc_status = 'expired'
 ORDER BY onboarded_at ASC;
 ```
@@ -47,14 +47,14 @@ ORDER BY onboarded_at ASC;
 **Blocked customers count by risk tier:**
 ```sql
 SELECT risk_tier, COUNT(*) AS blocked_count
-FROM customers
+FROM bank_customers
 WHERE status = 'blocked'
 GROUP BY risk_tier;
 ```
 
 # Related Concepts
 
-- [Accounts](./accounts.md)
+- [Bank Accounts](./bank_accounts.md)
 - [Loans](./loans.md)
 - [Flags](./flags.md)
 - [KYC Renewal Runbook](../runbooks/kyc_renewal.md)

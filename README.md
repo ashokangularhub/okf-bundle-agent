@@ -171,8 +171,8 @@ Response:
   "concept_count": 6,
   "concepts": [
     {
-      "concept_id": "tables/customers",
-      "title": "Customers",
+      "concept_id": "tables/bank_customers",
+      "title": "Bank Customers",
       "concept_type": "table",
       "description": "Customer master data",
       "tags": ["schema", "core"],
@@ -180,7 +180,7 @@ Response:
       "timestamp": "2025-01-20"
     }
   ],
-  "content": "## Customers (type: table)\n\n..."
+  "content": "## Bank Customers (type: table)\n\n..."
 }
 ```
 
@@ -290,8 +290,8 @@ The included `okf_bundle/` contains:
 okf_bundle/
 ├── index.md                    # Bundle index
 ├── tables/                     # 6 table definitions
-│   ├── customers.md
-│   ├── accounts.md
+│   ├── bank_customers.md
+│   ├── bank_accounts.md
 │   ├── transactions.md
 │   ├── loans.md
 │   ├── loan_payments.md

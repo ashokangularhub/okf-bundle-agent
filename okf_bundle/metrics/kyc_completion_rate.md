@@ -26,13 +26,13 @@ SELECT
     COUNT(*) AS total_active_customers,
     SUM(CASE WHEN kyc_status = 'verified' THEN 1 ELSE 0 END) AS verified_count,
     SUM(CASE WHEN kyc_status IN ('pending','expired','rejected') THEN 1 ELSE 0 END) AS unverified_count
-FROM customers
+FROM bank_customers
 WHERE status = 'active';
 ```
 
 # Source Tables
 
-- [customers](../tables/customers.md)
+- [bank_customers](../tables/bank_customers.md)
 
 # Thresholds
 

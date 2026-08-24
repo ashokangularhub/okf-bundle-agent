@@ -11,8 +11,8 @@ compliance workflows.
 
 ## Tables
 
-* [Customers](./tables/customers.md) - KYC-verified customer profiles
-* [Accounts](./tables/accounts.md) - Savings, checking, and fixed-deposit accounts
+* [Bank Customers](./tables/bank_customers.md) - KYC-verified customer profiles
+* [Bank Accounts](./tables/bank_accounts.md) - Savings, checking, and fixed-deposit accounts
 * [Transactions](./tables/transactions.md) - All debit/credit/transfer events
 * [Loans](./tables/loans.md) - Loan applications and lifecycle
 * [Loan Payments](./tables/loan_payments.md) - EMI schedule and payment history

@@ -31,7 +31,7 @@ Update [flag](../tables/flags.md) `status` from `open` → `under_review`.
 Record the analyst ID and start time in the audit log.
 
 ### Step 2: Profile the Customer
-Review the [customer](../tables/customers.md) record:
+Review the [customer](../tables/bank_customers.md) record:
 - Confirm `kyc_status = 'verified'`. If not, escalate immediately.
 - Note the `risk_tier`. `high` risk customers require senior analyst review.
 - Check for other open flags on the same `customer_id`.
@@ -54,7 +54,7 @@ ORDER BY txn_at DESC;
 - **Clear:** No suspicious activity. Set flag `status = 'false_positive'`.
   Record justification in audit log.
 - **Escalate:** Suspicious but inconclusive. Escalate to senior AML team.
-  Freeze the [account](../tables/accounts.md) (`status = 'frozen'`).
+  Freeze the [account](../tables/bank_accounts.md) (`status = 'frozen'`).
 - **Confirm & Report:** Confirmed suspicious activity. File a Suspicious
   Activity Report (SAR) with FinCEN. Set customer `status = 'blocked'`.
   Raise additional `critical` flags on all linked accounts.
@@ -68,5 +68,5 @@ Notify the compliance officer of any SAR filings.
 
 - [Flags Table](../tables/flags.md)
 - [Transactions Table](../tables/transactions.md)
-- [Customers Table](../tables/customers.md)
+- [Bank Customers Table](../tables/bank_customers.md)
 - [Transaction Success Rate](../metrics/transaction_success_rate.md)
