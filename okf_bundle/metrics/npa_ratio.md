@@ -2,6 +2,7 @@
 type: Metric
 title: NPA Ratio
 description: Non-Performing Asset ratio — outstanding balance of delinquent and written-off loans as a percentage of the total loan book. Regulatory target is <= 3%.
+domain: retail_banking
 tags: [loans, npa, kpi, credit-risk, regulatory]
 timestamp: 2026-07-21T09:00:00Z
 ---

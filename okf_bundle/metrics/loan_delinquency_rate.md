@@ -2,6 +2,7 @@
 type: Metric
 title: Loan Delinquency Rate
 description: Percentage of active loans that have at least one overdue installment. Target is <= 5%.
+domain: retail_banking
 tags: [loans, delinquency, kpi, credit-risk]
 timestamp: 2026-07-21T09:00:00Z
 ---

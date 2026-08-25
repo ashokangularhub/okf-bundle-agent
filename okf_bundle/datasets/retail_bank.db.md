@@ -3,6 +3,7 @@ type: Dataset
 title: Retail Bank Database
 description: Core PostgreSQL database for ClearBank retail banking operations — customer accounts, loan lifecycle, transactions, and compliance flags.
 resource: postgresql://core-db.clearbank.internal:5432/retail_bank
+domain: retail_banking
 tags: [banking, bfsi, retail, production, compliance]
 timestamp: 2026-07-21T09:00:00Z
 ---

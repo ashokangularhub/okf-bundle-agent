@@ -3,6 +3,7 @@ type: Table
 title: Loan Payments
 description: One row per EMI installment. Tracks payment due dates, amounts paid, and overdue status for every active loan.
 resource: postgresql://core-db.clearbank.internal:5432/retail_bank/public.loan_payments
+domain: retail_banking
 tags: [loans, emi, payments, delinquency]
 timestamp: 2026-07-21T09:00:00Z
 ---

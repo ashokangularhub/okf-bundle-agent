@@ -24,21 +24,61 @@ SECTION_FILES: dict[str, list[str]] = {
         "tables/loans.md",
         "tables/loan_payments.md",
         "tables/flags.md",
+        "tables/products.md",
+        "tables/product_variants.md",
+        "tables/product_pricing.md",
+        "tables/warehouses.md",
+        "tables/inventory.md",
+        "tables/customers.md",
+        "tables/orders.md",
+        "tables/order_items.md",
+        "tables/shipments.md",
+        "tables/order_status_history.md",
+        "tables/return_requests.md",
+        "tables/return_window_policy.md",
+        "tables/refunds.md",
+        "tables/item_condition_flags.md",
     ],
     "Metrics": [
         "metrics/loan_delinquency_rate.md",
         "metrics/npa_ratio.md",
         "metrics/transaction_success_rate.md",
         "metrics/kyc_completion_rate.md",
+        "metrics/on_time_delivery_rate.md",
+        "metrics/return_rate.md",
+        "metrics/refund_turnaround_time.md",
+        "metrics/stock_availability_rate.md",
     ],
     "Runbooks": [
         "runbooks/aml_alert_investigation.md",
         "runbooks/loan_restructuring.md",
         "runbooks/kyc_renewal.md",
+        "runbooks/return_eligibility_review.md",
+        "runbooks/shipment_exception_handling.md",
+        "runbooks/low_stock_restock_escalation.md",
     ],
     "Datasets": [
         "datasets/retail_bank.db.md",
+        "datasets/customer_products_db.md",
+        "datasets/product_information_catalog.md",
+        "datasets/returns_refunds_policy.md",
+        "datasets/technical_support_guide.md",
     ],
+}
+
+# domain each fallback file belongs to, used to filter SECTION_FILES by state.domain
+_RETAIL_BANKING_FILES = {
+    "tables/bank_customers.md", "tables/bank_accounts.md", "tables/transactions.md",
+    "tables/loans.md", "tables/loan_payments.md", "tables/flags.md",
+    "metrics/loan_delinquency_rate.md", "metrics/npa_ratio.md",
+    "metrics/transaction_success_rate.md", "metrics/kyc_completion_rate.md",
+    "runbooks/aml_alert_investigation.md", "runbooks/loan_restructuring.md",
+    "runbooks/kyc_renewal.md", "datasets/retail_bank.db.md",
+}
+FILE_DOMAINS: dict[str, str] = {
+    path: ("retail_banking" if path in _RETAIL_BANKING_FILES else "customer_support")
+    for paths in SECTION_FILES.values()
+    for path in paths
 }
 
 
@@ -55,8 +95,9 @@ class SectionRetrievalAgent(BaseAgent):
             "[%s] ════════════════════════════════════════\n"
             "[%s] SECTION RETRIEVAL STARTED\n"
             "[%s] Section Type: %s\n"
+            "[%s] Domain: %s\n"
             "[%s] ════════════════════════════════════════",
-            self.name, self.name, self.name, state.section_type, self.name
+            self.name, self.name, self.name, state.section_type, self.name, state.domain or "all", self.name
         )
 
         try:
@@ -64,7 +105,8 @@ class SectionRetrievalAgent(BaseAgent):
             logger.debug(
                 "[%s] BundleNavigator created, loading section...", self.name)
 
-            concepts = nav.load_section(state.section_type)
+            concepts = nav.load_section(
+                state.section_type, domain=state.domain or None)
             logger.info(
                 "[%s] BundleNavigator loaded %d concepts from %s section",
                 self.name, len(concepts), state.section_type
@@ -125,9 +167,11 @@ class SectionRetrievalAgent(BaseAgent):
         return state
 
     def _fallback_file_read(self, state: AgentState) -> None:
-        """Fallback: read section files directly from disk."""
+        """Fallback: read section files directly from disk, filtered by domain."""
         parts = []
         for rel_path in SECTION_FILES.get(state.section_type, []):
+            if state.domain and FILE_DOMAINS.get(rel_path) != state.domain:
+                continue
             full_path = settings.BUNDLE_ROOT / rel_path
             if full_path.exists():
                 try:

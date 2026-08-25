@@ -2,6 +2,7 @@
 type: Runbook
 title: KYC Renewal
 description: Process for re-verifying customers whose KYC has expired or been rejected, to restore full account access.
+domain: retail_banking
 tags: [kyc, customers, compliance, onboarding, workflow]
 timestamp: 2026-07-21T09:00:00Z
 ---

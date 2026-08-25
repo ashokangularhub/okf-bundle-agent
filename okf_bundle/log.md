@@ -12,6 +12,11 @@
 - Renamed `customers` table to `bank_customers` and `accounts` table to
   `bank_accounts` so the bundle can be reused as a knowledge base across
   multiple projects without naming collisions.
+- Integrated the Aurora Electronics customer/product knowledge domain
+  (from the `customer-product-okf-bundle` project) into this bundle:
+  14 tables, 4 datasets, 4 metrics, 3 runbooks. Added as new entries
+  alongside the existing ClearBank retail banking content — no existing
+  files were modified or removed, and no naming collisions were found.
 
 ## 2026-07-20
 

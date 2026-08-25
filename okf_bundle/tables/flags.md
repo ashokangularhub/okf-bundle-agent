@@ -3,6 +3,7 @@ type: Table
 title: Flags
 description: One row per compliance or fraud alert raised against a customer, account, transaction, or loan. Tracks severity, reason, and resolution.
 resource: postgresql://core-db.clearbank.internal:5432/retail_bank/public.flags
+domain: retail_banking
 tags: [flags, fraud, aml, compliance, risk]
 timestamp: 2026-07-21T09:00:00Z
 ---

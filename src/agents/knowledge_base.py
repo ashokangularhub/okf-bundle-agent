@@ -25,7 +25,8 @@ class KnowledgeBaseAgent(BaseAgent):
     name = "KnowledgeBaseAgent"
 
     _SYSTEM = (
-        "You are a banking knowledge base agent for ClearBank.\n\n"
+        "You are a knowledge base agent covering ClearBank retail banking "
+        "and Aurora Electronics customer/product support.\n\n"
         "Answer the user's question using ONLY the provided OKF bundle content. "
         "Cite specific runbook steps, rules, or procedures where applicable. "
         "Format procedures as numbered steps. "

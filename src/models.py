@@ -23,12 +23,14 @@ class SectionSelectionRequest(BaseModel):
 class SectionSelectionResponse(BaseModel):
     """Response with classified section."""
     section: str  # "Tables" | "Metrics" | "Runbooks" | "Datasets"
+    domain: Optional[str] = None  # "retail_banking" | "customer_support"
     confidence: Optional[float] = None
 
     class Config:
         json_schema_extra = {
             "example": {
                 "section": "Tables",
+                "domain": "retail_banking",
                 "confidence": 0.95
             }
         }
@@ -37,11 +39,14 @@ class SectionSelectionResponse(BaseModel):
 class SectionRetrievalRequest(BaseModel):
     """Request to retrieve OKF content for a section."""
     section_type: str  # "Tables" | "Metrics" | "Runbooks" | "Datasets"
+    # "retail_banking" | "customer_support"; None = all domains
+    domain: Optional[str] = None
 
     class Config:
         json_schema_extra = {
             "example": {
-                "section_type": "Tables"
+                "section_type": "Tables",
+                "domain": "retail_banking"
             }
         }
 
@@ -60,6 +65,7 @@ class ConceptMetadata(BaseModel):
 class SectionRetrievalResponse(BaseModel):
     """Response with loaded OKF content."""
     section_type: str
+    domain: Optional[str] = None
     concept_count: int
     concepts: list[ConceptMetadata]
     content: str  # Full markdown concatenated content
@@ -86,6 +92,7 @@ class ContextBuilderRequest(BaseModel):
     """Request to build structured context from raw OKF content."""
     query: str
     okf_content: str
+    domain: Optional[str] = None  # "retail_banking" | "customer_support"
 
     class Config:
         json_schema_extra = {
@@ -164,6 +171,7 @@ class AgentState:
     conversation_history: list = field(default_factory=list)
     intent: str = ""
     section_type: str = ""  # "Tables" | "Metrics" | "Runbooks" | "Datasets"
+    domain: str = ""  # "retail_banking" | "customer_support"; "" = all domains
     okf_content: str = ""
     system_context: str = ""
     final_answer: str = ""

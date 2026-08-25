@@ -90,7 +90,8 @@ class ContextBuilderAgent(BaseAgent):
     name = "ContextBuilderAgent"
 
     _SYSTEM = (
-        "You are a context builder for a banking knowledge system.\n\n"
+        "You are a context builder for a multi-domain knowledge system "
+        "(retail banking and e-commerce customer/product support).\n\n"
         "Given raw OKF knowledge bundle content, distill a concise but complete "
         "system context that includes:\n"
         "  1. **Table schemas**: EXACT column names (with types, ENUM values)\n"
@@ -122,7 +123,13 @@ class ContextBuilderAgent(BaseAgent):
         # under its own '## Title (type: ...)' header — collect every real
         # table name so we never imply that only one table exists.
         titles = extract_table_titles(state.okf_content)
-        title_to_actual = {t: title_to_snake_case(t) for t in titles}
+        # customer_support tables live in a dedicated Postgres schema, so SQL
+        # must qualify them (e.g. customer_support.orders); retail_banking
+        # tables live in the default "public" schema and stay unqualified.
+        schema_prefix = "customer_support." if state.domain == "customer_support" else ""
+        title_to_actual = {
+            t: f"{schema_prefix}{title_to_snake_case(t)}" for t in titles
+        }
 
         # Build context with column reference
         user_msg = f"User query: {state.user_query}\n\n"

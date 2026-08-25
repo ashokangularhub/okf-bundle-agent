@@ -23,31 +23,44 @@ class SectionSelectionAgent(BaseAgent):
     name = "SectionSelectionAgent"
 
     _VALID_SECTIONS = {"Tables", "Metrics", "Runbooks", "Datasets"}
+    _VALID_DOMAINS = {"retail_banking", "customer_support"}
 
     _SYSTEM = (
-        "You are a query router for a banking knowledge system.\n\n"
+        "You are a query router for a multi-domain knowledge system covering "
+        "both retail banking (ClearBank) and e-commerce customer/product support "
+        "(Aurora Electronics).\n\n"
         "Choose the SINGLE most relevant OKF section for the user's query:\n\n"
         "**Tables**: SQL data queries about specific entities or records\n"
         "  - 'Show me customers who...', 'List loans with status X', 'Find accounts belonging to Y'\n"
+        "  - 'Where is order X?', 'List returns for customer Y', 'Show SKUs out of stock'\n"
         "  - Queries requesting: details, listings, specific records, filtered data\n"
-        "  - Examples: 'Show delinquent loans', 'List frozen accounts', 'Customers with upcoming payments'\n"
-        "  - Key indicators: specific customer/loan/account details, data lookups\n\n"
+        "  - Examples: 'Show delinquent loans', 'List frozen accounts', 'Where is my order ORD-2026-00841?'\n"
+        "  - Key indicators: specific customer/loan/account/order/product details, data lookups\n\n"
         "**Metrics**: Aggregate statistics, KPI computations, rates, and ratios\n"
         "  - 'What is the delinquency rate?', 'Calculate NPA ratio', 'Transaction success rate'\n"
+        "  - 'What is the return rate?', 'On-time delivery rate this month', 'Stock availability rate'\n"
         "  - Queries requesting: percentages, averages, counts, aggregates\n"
-        "  - Examples: 'Delinquency rate by month', 'KYC completion percentage', 'Average loan amount'\n"
+        "  - Examples: 'Delinquency rate by month', 'Average refund turnaround time'\n"
         "  - Key indicators: rate, ratio, average, count, percentage, aggregate\n\n"
         "**Runbooks**: Operational procedures and workflows\n"
         "  - 'How to investigate an AML alert?', 'Steps for loan restructuring', 'KYC renewal process'\n"
+        "  - 'How do I review a return request?', 'Steps for a shipment exception', 'Low stock escalation process'\n"
         "  - Queries requesting: procedures, steps, workflows, processes, instructions\n"
-        "  - Examples: 'AML investigation steps', 'Loan restructuring procedure', 'KYC renewal checklist'\n"
+        "  - Examples: 'AML investigation steps', 'Return eligibility review process'\n"
         "  - Key indicators: how to, steps, process, procedure, workflow\n\n"
         "**Datasets**: Database/storage metadata and retention policies\n"
         "  - 'Where is customer data stored?', 'Data retention policy', 'Backup schedule'\n"
+        "  - 'Where is the product catalog PDF indexed?', 'What database backs orders?'\n"
         "  - Queries requesting: storage info, retention policies, metadata\n"
         "  - Examples: 'Data retention period', 'Where is customer PII stored', 'Backup frequency'\n"
         "  - Key indicators: metadata, storage, retention, policy, where is\n\n"
-        "Respond ONLY with valid JSON: {\"section\": \"<Tables|Metrics|Runbooks|Datasets>\"}"
+        "ALSO identify which domain the query belongs to:\n"
+        "  - \"retail_banking\": customers, accounts, transactions, loans, payments, flags, KYC, AML\n"
+        "  - \"customer_support\": products, orders, shipments, inventory, returns, refunds, warehouses\n"
+        "  - If genuinely ambiguous or spans both, omit the domain field.\n\n"
+        "Respond ONLY with valid JSON: "
+        "{\"section\": \"<Tables|Metrics|Runbooks|Datasets>\", "
+        "\"domain\": \"<retail_banking|customer_support|null>\"}"
     )
 
     def run(self, state: AgentState) -> AgentState:
@@ -74,12 +87,27 @@ class SectionSelectionAgent(BaseAgent):
                 sec = "Tables"
 
         state.section_type = sec
+
+        dom = result.get("domain") if isinstance(result, dict) else None
+        dom = str(dom).strip() if dom else ""
+        if dom and dom.lower() not in self._VALID_DOMAINS:
+            for v in self._VALID_DOMAINS:
+                if v.lower() == dom.lower():
+                    dom = v
+                    break
+            else:
+                logger.warning(
+                    "[%s] Unknown domain '%s', leaving unset (all domains).", self.name, dom
+                )
+                dom = ""
+        state.domain = dom
+
         logger.info(
-            "[%s] ✅ SECTION SELECTED: %s\n"
+            "[%s] ✅ SECTION SELECTED: %s (domain=%s)\n"
             "[%s] Query was routed to: %s section\n"
             "[%s] This section will load: %s concepts",
+            self.name, state.section_type, state.domain or "all",
             self.name, state.section_type,
-            self.name, state.section_type,
-            self.name, "6 Tables" if sec == "Tables" else "4 Metrics" if sec == "Metrics" else "3 Runbooks" if sec == "Runbooks" else "1 Dataset"
+            self.name, "20 Tables" if sec == "Tables" else "8 Metrics" if sec == "Metrics" else "6 Runbooks" if sec == "Runbooks" else "5 Datasets"
         )
         return state

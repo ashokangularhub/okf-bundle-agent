@@ -3,6 +3,7 @@ type: Table
 title: Transactions
 description: One row per financial event (debit, credit, or transfer). Immutable ledger entries created by the banking engine.
 resource: postgresql://core-db.clearbank.internal:5432/retail_bank/public.transactions
+domain: retail_banking
 tags: [transactions, ledger, payments, banking]
 timestamp: 2026-07-21T09:00:00Z
 ---

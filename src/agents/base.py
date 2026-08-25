@@ -21,6 +21,7 @@ class AgentState:
     user_query: str
     conversation_history: list = field(default_factory=list)
     section_type: str = ""  # "Tables" | "Metrics" | "Runbooks" | "Datasets"
+    domain: str = ""  # "retail_banking" | "customer_support"; "" = all domains
     okf_content: str = ""
     system_context: str = ""
     final_answer: str = ""

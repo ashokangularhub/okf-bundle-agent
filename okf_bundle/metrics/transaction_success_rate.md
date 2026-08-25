@@ -2,6 +2,7 @@
 type: Metric
 title: Transaction Success Rate
 description: Percentage of transactions that completed successfully, excluding reversals. Target is >= 98%.
+domain: retail_banking
 tags: [transactions, kpi, payments, uptime]
 timestamp: 2026-07-21T09:00:00Z
 ---

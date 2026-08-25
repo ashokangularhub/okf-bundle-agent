@@ -1,6 +1,6 @@
 # OKF Bundle Agent Service
 
-A standalone FastAPI microservice for **Open Knowledge Format (OKF)** bundle operations. Provides REST endpoints for semantic routing, knowledge retrieval, and intelligent context building for banking domain queries.
+A standalone FastAPI microservice for **Open Knowledge Format (OKF)** bundle operations. Provides REST endpoints for semantic routing, knowledge retrieval, and intelligent context building for multi-domain queries (retail banking + e-commerce customer/product support).
 
 ## 🎯 Purpose
 

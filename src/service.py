@@ -164,12 +164,14 @@ async def classify_section(req: SectionSelectionRequest) -> SectionSelectionResp
         logger.info(
             "[OKF-BUNDLE] ✅ SECTION SELECTED:\n"
             "[OKF-BUNDLE] Section: %s\n"
+            "[OKF-BUNDLE] Domain: %s\n"
             "[OKF-BUNDLE] Query: %s",
-            state.section_type, req.query
+            state.section_type, state.domain, req.query
         )
 
         return SectionSelectionResponse(
             section=state.section_type,
+            domain=state.domain or None,
             confidence=0.9  # Mock confidence for now
         )
     except Exception as exc:
@@ -237,6 +239,7 @@ async def retrieve_section(req: SectionRetrievalRequest) -> SectionRetrievalResp
     try:
         state = AgentState(user_query=f"Get {req.section_type} section")
         state.section_type = req.section_type
+        state.domain = req.domain or ""
 
         agent = SectionRetrievalAgent()
         state = agent.run(state)
@@ -260,6 +263,7 @@ async def retrieve_section(req: SectionRetrievalRequest) -> SectionRetrievalResp
 
         return SectionRetrievalResponse(
             section_type=state.section_type,
+            domain=state.domain or None,
             concept_count=1,  # Simplified
             concepts=concepts,
             content=state.okf_content
@@ -325,6 +329,7 @@ async def build_context(req: ContextBuilderRequest) -> ContextBuilderResponse:
             user_query=req.query,
             okf_content=req.okf_content
         )
+        state.domain = req.domain or ""
 
         agent = ContextBuilderAgent()
         state = agent.run(state)

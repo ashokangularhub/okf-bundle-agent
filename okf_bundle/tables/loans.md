@@ -3,6 +3,7 @@ type: Table
 title: Loans
 description: One row per loan application. Tracks loan type, principal, outstanding balance, interest rate, and lifecycle status.
 resource: postgresql://core-db.clearbank.internal:5432/retail_bank/public.loans
+domain: retail_banking
 tags: [loans, credit, npa, delinquency, banking]
 timestamp: 2026-07-21T09:00:00Z
 ---

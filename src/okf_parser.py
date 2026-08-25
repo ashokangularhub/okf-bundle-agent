@@ -38,6 +38,7 @@ class Concept:
     title: str = ""
     description: str = ""
     resource: str = ""
+    domain: str = ""
     tags: list = field(default_factory=list)
     timestamp: str = ""
     body: str = ""
@@ -97,6 +98,7 @@ def parse_concept_file(md_file: pathlib.Path,
         title=meta.get("title", concept_id.split("/")[-1]),
         description=meta.get("description", ""),
         resource=meta.get("resource", ""),
+        domain=meta.get("domain", ""),
         tags=meta.get("tags", []),
         timestamp=str(meta.get("timestamp", "")),
         body=body,
@@ -241,7 +243,10 @@ class BundleNavigator:
                 lines.append(f"    • {entry.title}{desc}")
         return "\n".join(lines)
 
-    def load_section(self, section_name: str) -> list[Concept]:
+    def load_section(self, section_name: str, domain: str | None = None) -> list[Concept]:
+        """Load all concepts in a section, optionally filtered to a single
+        `domain` (matches the concept's frontmatter `domain:` field).
+        `domain=None` returns every concept in the section, across domains."""
         entries = self._sections.get(section_name, [])
         if not entries:
             for key, val in self._sections.items():
@@ -254,7 +259,7 @@ class BundleNavigator:
             concept_path = (self.root / entry.relative_path).resolve()
             if concept_path.exists() and concept_path.suffix == ".md":
                 concept = self._load_file(concept_path)
-                if concept:
+                if concept and (domain is None or concept.domain == domain):
                     loaded.append(concept)
         return loaded
 

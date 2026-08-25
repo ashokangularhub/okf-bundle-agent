@@ -2,6 +2,7 @@
 type: Runbook
 title: AML Alert Investigation
 description: Step-by-step workflow for investigating anti-money laundering flags raised on customer accounts or transactions.
+domain: retail_banking
 tags: [aml, compliance, fraud, flags, workflow]
 timestamp: 2026-07-21T09:00:00Z
 ---

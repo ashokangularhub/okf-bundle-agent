@@ -3,6 +3,7 @@ type: Table
 title: Bank Customers
 description: One row per onboarded bank customer. Contains KYC status, risk tier, and identity information.
 resource: postgresql://core-db.clearbank.internal:5432/retail_bank/public.bank_customers
+domain: retail_banking
 tags: [bank_customers, kyc, PII, onboarding, compliance]
 timestamp: 2026-07-21T09:00:00Z
 ---

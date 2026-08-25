@@ -2,6 +2,7 @@
 type: Metric
 title: KYC Completion Rate
 description: Percentage of active customers with verified KYC status. Regulatory minimum is 95%.
+domain: retail_banking
 tags: [customers, kyc, kpi, compliance, regulatory]
 timestamp: 2026-07-21T09:00:00Z
 ---

@@ -2,6 +2,7 @@
 type: Runbook
 title: Loan Restructuring
 description: Workflow for restructuring delinquent or at-risk loans to prevent write-off and enable customer recovery.
+domain: retail_banking
 tags: [loans, delinquency, restructuring, credit-risk, workflow]
 timestamp: 2026-07-21T09:00:00Z
 ---

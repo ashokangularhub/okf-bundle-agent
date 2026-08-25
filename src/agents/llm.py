@@ -108,6 +108,8 @@ def _mock_llm(system: str, user: str, *, json_mode: bool) -> str | dict[str, Any
             "loan", "customer", "account", "transaction", "kyc", "aml",
             "flag", "balance", "payment", "delinquent", "npa", "runbook",
             "clearbank", "banking", "fraud", "risk", "metric",
+            "order", "product", "sku", "shipment", "return", "refund",
+            "inventory", "warehouse", "aurora", "delivery", "stock",
         ]
         intent = "domain" if any(kw in ul for kw in domain_kws) else "general"
         return {"intent": intent} if json_mode else intent
@@ -117,18 +119,37 @@ def _mock_llm(system: str, user: str, *, json_mode: bool) -> str | dict[str, Any
         if any(w in ul for w in [
             "runbook", "steps for", "procedure", "aml investigation",
             "kyc renewal", "loan restructuring", "how to", "workflow",
+            "return eligibility", "shipment exception", "restock escalation",
         ]):
             sec = "Runbooks"
         elif any(w in ul for w in [
             "metric", "kpi", "delinquency rate", "npa ratio",
             "success rate", "kyc completion", "ratio", "percentage",
+            "on-time delivery", "return rate", "turnaround time", "availability rate",
         ]):
             sec = "Metrics"
         elif any(w in ul for w in ["dataset", "database", "retention", "storage"]):
             sec = "Datasets"
         else:
             sec = "Tables"
-        return {"section": sec} if json_mode else sec
+
+        banking_kws = [
+            "loan", "customer", "account", "transaction", "kyc", "aml",
+            "flag", "balance", "payment", "delinquent", "npa", "clearbank",
+        ]
+        support_kws = [
+            "order", "product", "sku", "shipment", "return", "refund",
+            "inventory", "warehouse", "aurora", "delivery", "stock",
+        ]
+        has_banking = any(kw in ul for kw in banking_kws)
+        has_support = any(kw in ul for kw in support_kws)
+        domain = ""
+        if has_banking and not has_support:
+            domain = "retail_banking"
+        elif has_support and not has_banking:
+            domain = "customer_support"
+
+        return {"section": sec, "domain": domain} if json_mode else sec
 
     # ── Context building ──────────────────────────────────────────────
     if "context builder" in sl or ("context" in sl and "schema context" in sl):

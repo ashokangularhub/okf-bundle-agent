@@ -3,6 +3,7 @@ type: Table
 title: Bank Accounts
 description: One row per bank account. Covers savings, checking, and fixed-deposit account types with balance and status tracking.
 resource: postgresql://core-db.clearbank.internal:5432/retail_bank/public.bank_accounts
+domain: retail_banking
 tags: [bank_accounts, balance, banking, ledger]
 timestamp: 2026-07-21T09:00:00Z
 ---
