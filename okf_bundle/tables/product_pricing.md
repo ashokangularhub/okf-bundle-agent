@@ -36,6 +36,18 @@ FROM product_pricing
 WHERE promo_label IS NOT NULL;
 ```
 
+**Price of a SKU plus whether a promotion is currently active** (a value +
+status question — never filter by the promo dates in `WHERE`, or you lose
+the price row entirely whenever there's no active promo):
+```sql
+SELECT sku, current_price, promo_label,
+       CASE WHEN promo_label IS NOT NULL
+                 AND CURRENT_DATE BETWEEN promo_start_date AND promo_end_date
+            THEN TRUE ELSE FALSE END AS promotion_active
+FROM product_pricing
+WHERE sku = 'AUR-EB-PRO2-WHT';
+```
+
 # Related Concepts
 
 - [Product Variants](./product_variants.md)

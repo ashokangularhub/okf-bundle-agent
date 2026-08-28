@@ -37,6 +37,17 @@ WHERE c.email = 'ananya.rao@example.com'
 ORDER BY o.order_date DESC;
 ```
 
+**Orders placed by a customer name (when only a name, not an email, is
+given — always quote the name as a string literal and match case-
+insensitively/partially since names may be given informally):**
+```sql
+SELECT o.order_id, o.order_status, o.order_date, o.total_amount
+FROM orders o
+JOIN customers c ON c.customer_id = o.customer_id
+WHERE c.full_name ILIKE '%Ananya Rao%'
+ORDER BY o.order_date DESC;
+```
+
 # Related Concepts
 
 - [Orders](./orders.md)
