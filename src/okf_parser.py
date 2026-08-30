@@ -304,6 +304,74 @@ class BundleNavigator:
             return None
 
 
+class MultiDomainBundleNavigator:
+    """
+    Fans section/concept requests out across multiple standalone, per-domain
+    bundles (e.g. okf_bundle/retail_bank_database/, okf_bundle/customer_support/),
+    each owned by its own `BundleNavigator`.
+
+    Lets callers keep asking for a section with an optional `domain` filter
+    exactly as before the bundles were physically segregated:
+      - `domain` given  → delegate to that single domain's navigator only.
+      - `domain` omitted → merge results from every domain's navigator.
+    """
+
+    def __init__(self, bundle_roots: dict[str, "str | pathlib.Path"]):
+        self._navigators: dict[str, BundleNavigator] = {
+            domain: BundleNavigator(str(root))
+            for domain, root in bundle_roots.items()
+        }
+
+    def list_sections(self) -> dict[str, list[str]]:
+        merged: dict[str, list[str]] = {}
+        for nav in self._navigators.values():
+            for section, titles in nav.list_sections().items():
+                merged.setdefault(section, []).extend(titles)
+        return merged
+
+    def get_section_summary(self) -> str:
+        return "\n\n".join(
+            f"[domain: {domain}]\n{nav.get_section_summary()}"
+            for domain, nav in self._navigators.items()
+        )
+
+    def load_section(self, section_name: str, domain: str | None = None) -> list[Concept]:
+        """Load all concepts in a section. `domain=None` merges every
+        domain's bundle; otherwise only that domain's bundle is queried."""
+        if domain:
+            nav = self._navigators.get(domain)
+            return nav.load_section(section_name) if nav else []
+
+        loaded: list[Concept] = []
+        for nav in self._navigators.values():
+            loaded.extend(nav.load_section(section_name))
+        return loaded
+
+    def load_concept(self, concept_id: str, domain: str | None = None) -> Concept | None:
+        navs = (
+            [self._navigators[domain]] if domain and domain in self._navigators
+            else self._navigators.values()
+        )
+        for nav in navs:
+            concept = nav.load_concept(concept_id)
+            if concept:
+                return concept
+        return None
+
+    def follow_links(self, concepts: list[Concept],
+                     max_hops: int = 1,
+                     max_links: int = 5) -> list[Concept]:
+        newly_loaded: list[Concept] = []
+        for nav in self._navigators.values():
+            if len(newly_loaded) >= max_links:
+                break
+            newly_loaded.extend(nav.follow_links(
+                concepts, max_hops=max_hops, max_links=max_links -
+                len(newly_loaded)
+            ))
+        return newly_loaded
+
+
 if __name__ == "__main__":
     bundle_path = sys.argv[1] if len(sys.argv) > 1 else "okf_bundle"
     print(f"\n=== OKF Bundle Inspector ===\nBundle: {bundle_path}\n")

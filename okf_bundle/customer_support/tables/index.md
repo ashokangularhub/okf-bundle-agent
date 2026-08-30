@@ -1,14 +1,5 @@
 # Tables
 
-* [Bank Customers](./bank_customers.md) - KYC-verified customer profiles and risk tiers
-* [Bank Accounts](./bank_accounts.md) - Savings, checking, and fixed-deposit accounts
-* [Transactions](./transactions.md) - All debit, credit, and transfer events
-* [Loans](./loans.md) - Loan applications, disbursements, and lifecycle
-* [Loan Payments](./loan_payments.md) - EMI schedule and payment history
-* [Flags](./flags.md) - Fraud, AML, and compliance alert records
-
-## Aurora Electronics (Customer Products)
-
 * [Products](./products.md) - Master product catalog entries
 * [Product Variants](./product_variants.md) - Purchasable SKUs (color/switch-type/size) per product
 * [Product Pricing](./product_pricing.md) - Live, promo-aware price per SKU

@@ -27,5 +27,18 @@ class Settings(BaseSettings):
         env_file = ".env"
         case_sensitive = True
 
+    @property
+    def BUNDLE_ROOTS(self) -> dict[str, Path]:
+        """Domain identifier -> standalone bundle directory.
+
+        `okf_bundle/` was split into two independent bundles (see
+        okf_bundle/log.md, 2026-08-30). Each domain is a complete bundle
+        with its own index.md and tables/metrics/runbooks/datasets sections.
+        """
+        return {
+            "retail_banking": self.BUNDLE_ROOT / "retail_bank_database",
+            "customer_support": self.BUNDLE_ROOT / "customer_support",
+        }
+
 
 settings = Settings()

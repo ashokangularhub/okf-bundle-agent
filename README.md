@@ -37,13 +37,19 @@ A standalone FastAPI microservice for **Open Knowledge Format (OKF)** bundle ope
              │
              ▼
 ┌─────────────────────────────────────────┐
-│   OKF Bundle (Markdown Knowledge Base)  │
-│   ├── tables/                           │
-│   ├── metrics/                          │
-│   ├── runbooks/                         │
-│   └── datasets/                         │
-└─────────────────────────────────────────┘
+│      MultiDomainBundleNavigator          │
+├───────────────────┬─────────────────────┤
+│ retail_bank_database│   customer_support │
+│  ├── tables/        │   ├── tables/      │
+│  ├── metrics/        │   ├── metrics/    │
+│  ├── runbooks/       │   ├── runbooks/   │
+│  └── datasets/       │   └── datasets/   │
+└───────────────────┴─────────────────────┘
 ```
+
+Each domain is a standalone OKF bundle (own `index.md` + sections). A query's
+`domain` (from `SectionSelectionAgent`) picks a single bundle; when the domain
+is ambiguous, results are merged across both — the REST API is unchanged.
 
 ## ✨ Features
 
@@ -252,7 +258,7 @@ All configuration via environment variables (see `.env.example`):
 | `OPENAI_API_KEY` | `` | OpenAI API key (optional) |
 | `OPENAI_MODEL` | `gpt-4o` | LLM model |
 | `OPENAI_TIMEOUT` | `30` | API timeout (seconds) |
-| `BUNDLE_ROOT` | `okf_bundle/` | Path to OKF bundle |
+| `BUNDLE_ROOT` | `okf_bundle/` | Root folder containing the per-domain bundles (`BUNDLE_ROOTS` derives `retail_bank_database/` and `customer_support/` from it) |
 
 ## 📚 Integration Guide
 
@@ -284,32 +290,28 @@ pytest --cov=src tests/
 
 ## 🏦 OKF Bundle Structure
 
-The included `okf_bundle/` contains:
+`okf_bundle/` hosts **two standalone bundles**, one per domain, each with its
+own `index.md` and `tables/`/`metrics/`/`runbooks/`/`datasets/` sections:
 
 ```
 okf_bundle/
-├── index.md                    # Bundle index
-├── tables/                     # 6 table definitions
-│   ├── bank_customers.md
-│   ├── bank_accounts.md
-│   ├── transactions.md
-│   ├── loans.md
-│   ├── loan_payments.md
-│   └── flags.md
-├── metrics/                    # 4 KPI definitions
-│   ├── loan_delinquency_rate.md
-│   ├── npa_ratio.md
-│   ├── transaction_success_rate.md
-│   └── kyc_completion_rate.md
-├── runbooks/                   # 3 operational procedures
-│   ├── aml_alert_investigation.md
-│   ├── loan_restructuring.md
-│   └── kyc_renewal.md
-└── datasets/
-    └── retail_bank.db.md       # Database metadata
+├── index.md                          # Landing page (not parsed by code)
+├── retail_bank_database/             # ClearBank retail banking bundle
+│   ├── index.md
+│   ├── tables/                       # 6 table definitions
+│   ├── metrics/                      # 4 KPI definitions
+│   ├── runbooks/                     # 3 operational procedures
+│   └── datasets/
+│       └── retail_bank.db.md         # Database metadata
+└── customer_support/                 # Aurora Electronics customer support bundle
+    ├── index.md
+    ├── tables/                       # 14 table definitions
+    ├── metrics/                      # 4 KPI definitions
+    ├── runbooks/                     # 3 operational procedures
+    └── datasets/                     # 4 dataset descriptions
 ```
 
-Each markdown file has YAML frontmatter (type, title, description, etc.) and business rules/schemas in the body.
+Each markdown file has YAML frontmatter (type, title, description, domain, etc.) and business rules/schemas in the body.
 
 ## 🔐 Security
 

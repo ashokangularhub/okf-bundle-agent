@@ -14,9 +14,10 @@ The `customer_support` schema inside the shared `common_knowledgebase_db`
 PostgreSQL database is the system of record for Aurora Electronics'
 product catalog, live pricing/inventory, order fulfillment, and
 returns/refunds eligibility facts. It lives alongside the retail banking
-tables (`public` schema, see [Retail Bank Database](./retail_bank.db.md))
-in the same physical database so this bundle can be reused across
-multiple projects without needing a separate database instance.
+tables (`public` schema, see the Retail Bank Database dataset in the
+`retail_bank_database` bundle) in the same physical database so this
+bundle can be reused across multiple projects without needing a separate
+database instance.
 
 ## Tables
 

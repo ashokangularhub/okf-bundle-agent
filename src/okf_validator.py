@@ -19,7 +19,8 @@ import yaml
 
 RESERVED_FILES = {"index.md", "log.md"}
 LINK_RE = re.compile(r"\]\(([^)]+\.md)\)")
-OPTIONAL_FIELDS = {"title", "description", "resource", "tags", "timestamp"}
+OPTIONAL_FIELDS = {"title", "description",
+                   "resource", "tags", "timestamp", "domain"}
 
 
 def validate_bundle(bundle_path: str) -> tuple[list, list]:
@@ -121,7 +122,7 @@ def main():
     bundle_dir = sys.argv[1] if len(sys.argv) > 1 else "okf_bundle"
 
     print("=" * 64)
-    print(f"  OKF v0.1 Bundle Validator — ClearBank Retail Banking")
+    print("  OKF v0.1 Bundle Validator")
     print(f"  Bundle: {bundle_dir}")
     print("=" * 64)
 

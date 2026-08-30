@@ -11,74 +11,77 @@ import logging
 
 from .base import AgentState, BaseAgent
 from ..config import settings
-from ..okf_parser import BundleNavigator
+from ..okf_parser import MultiDomainBundleNavigator
 
 logger = logging.getLogger("okf_bundle.agents.section_retrieval")
 
-# Fallback file mappings if BundleNavigator fails
-SECTION_FILES: dict[str, list[str]] = {
-    "Tables": [
-        "tables/bank_customers.md",
-        "tables/bank_accounts.md",
-        "tables/transactions.md",
-        "tables/loans.md",
-        "tables/loan_payments.md",
-        "tables/flags.md",
-        "tables/products.md",
-        "tables/product_variants.md",
-        "tables/product_pricing.md",
-        "tables/warehouses.md",
-        "tables/inventory.md",
-        "tables/customers.md",
-        "tables/orders.md",
-        "tables/order_items.md",
-        "tables/shipments.md",
-        "tables/order_status_history.md",
-        "tables/return_requests.md",
-        "tables/return_window_policy.md",
-        "tables/refunds.md",
-        "tables/item_condition_flags.md",
-    ],
-    "Metrics": [
-        "metrics/loan_delinquency_rate.md",
-        "metrics/npa_ratio.md",
-        "metrics/transaction_success_rate.md",
-        "metrics/kyc_completion_rate.md",
-        "metrics/on_time_delivery_rate.md",
-        "metrics/return_rate.md",
-        "metrics/refund_turnaround_time.md",
-        "metrics/stock_availability_rate.md",
-    ],
-    "Runbooks": [
-        "runbooks/aml_alert_investigation.md",
-        "runbooks/loan_restructuring.md",
-        "runbooks/kyc_renewal.md",
-        "runbooks/return_eligibility_review.md",
-        "runbooks/shipment_exception_handling.md",
-        "runbooks/low_stock_restock_escalation.md",
-    ],
-    "Datasets": [
-        "datasets/retail_bank.db.md",
-        "datasets/customer_products_db.md",
-        "datasets/product_information_catalog.md",
-        "datasets/returns_refunds_policy.md",
-        "datasets/technical_support_guide.md",
-    ],
-}
-
-# domain each fallback file belongs to, used to filter SECTION_FILES by state.domain
-_RETAIL_BANKING_FILES = {
-    "tables/bank_customers.md", "tables/bank_accounts.md", "tables/transactions.md",
-    "tables/loans.md", "tables/loan_payments.md", "tables/flags.md",
-    "metrics/loan_delinquency_rate.md", "metrics/npa_ratio.md",
-    "metrics/transaction_success_rate.md", "metrics/kyc_completion_rate.md",
-    "runbooks/aml_alert_investigation.md", "runbooks/loan_restructuring.md",
-    "runbooks/kyc_renewal.md", "datasets/retail_bank.db.md",
-}
-FILE_DOMAINS: dict[str, str] = {
-    path: ("retail_banking" if path in _RETAIL_BANKING_FILES else "customer_support")
-    for paths in SECTION_FILES.values()
-    for path in paths
+# Fallback file mappings if BundleNavigator fails. Paths are relative to
+# settings.BUNDLE_ROOT and rooted under each domain's standalone bundle
+# directory (okf_bundle/retail_bank_database/, okf_bundle/customer_support/).
+SECTION_FILES: dict[str, dict[str, list[str]]] = {
+    "Tables": {
+        "retail_banking": [
+            "retail_bank_database/tables/bank_customers.md",
+            "retail_bank_database/tables/bank_accounts.md",
+            "retail_bank_database/tables/transactions.md",
+            "retail_bank_database/tables/loans.md",
+            "retail_bank_database/tables/loan_payments.md",
+            "retail_bank_database/tables/flags.md",
+        ],
+        "customer_support": [
+            "customer_support/tables/products.md",
+            "customer_support/tables/product_variants.md",
+            "customer_support/tables/product_pricing.md",
+            "customer_support/tables/warehouses.md",
+            "customer_support/tables/inventory.md",
+            "customer_support/tables/customers.md",
+            "customer_support/tables/orders.md",
+            "customer_support/tables/order_items.md",
+            "customer_support/tables/shipments.md",
+            "customer_support/tables/order_status_history.md",
+            "customer_support/tables/return_requests.md",
+            "customer_support/tables/return_window_policy.md",
+            "customer_support/tables/refunds.md",
+            "customer_support/tables/item_condition_flags.md",
+        ],
+    },
+    "Metrics": {
+        "retail_banking": [
+            "retail_bank_database/metrics/loan_delinquency_rate.md",
+            "retail_bank_database/metrics/npa_ratio.md",
+            "retail_bank_database/metrics/transaction_success_rate.md",
+            "retail_bank_database/metrics/kyc_completion_rate.md",
+        ],
+        "customer_support": [
+            "customer_support/metrics/on_time_delivery_rate.md",
+            "customer_support/metrics/return_rate.md",
+            "customer_support/metrics/refund_turnaround_time.md",
+            "customer_support/metrics/stock_availability_rate.md",
+        ],
+    },
+    "Runbooks": {
+        "retail_banking": [
+            "retail_bank_database/runbooks/aml_alert_investigation.md",
+            "retail_bank_database/runbooks/loan_restructuring.md",
+            "retail_bank_database/runbooks/kyc_renewal.md",
+        ],
+        "customer_support": [
+            "customer_support/runbooks/return_eligibility_review.md",
+            "customer_support/runbooks/shipment_exception_handling.md",
+            "customer_support/runbooks/low_stock_restock_escalation.md",
+        ],
+    },
+    "Datasets": {
+        "retail_banking": [
+            "retail_bank_database/datasets/retail_bank.db.md",
+        ],
+        "customer_support": [
+            "customer_support/datasets/customer_products_db.md",
+            "customer_support/datasets/product_information_catalog.md",
+            "customer_support/datasets/returns_refunds_policy.md",
+            "customer_support/datasets/technical_support_guide.md",
+        ],
+    },
 }
 
 
@@ -101,9 +104,9 @@ class SectionRetrievalAgent(BaseAgent):
         )
 
         try:
-            nav = BundleNavigator(str(settings.BUNDLE_ROOT))
+            nav = MultiDomainBundleNavigator(settings.BUNDLE_ROOTS)
             logger.debug(
-                "[%s] BundleNavigator created, loading section...", self.name)
+                "[%s] MultiDomainBundleNavigator created, loading section...", self.name)
 
             concepts = nav.load_section(
                 state.section_type, domain=state.domain or None)
@@ -168,10 +171,12 @@ class SectionRetrievalAgent(BaseAgent):
 
     def _fallback_file_read(self, state: AgentState) -> None:
         """Fallback: read section files directly from disk, filtered by domain."""
+        by_domain = SECTION_FILES.get(state.section_type, {})
+        domains = [state.domain] if state.domain else list(by_domain.keys())
+        rel_paths = [p for d in domains for p in by_domain.get(d, [])]
+
         parts = []
-        for rel_path in SECTION_FILES.get(state.section_type, []):
-            if state.domain and FILE_DOMAINS.get(rel_path) != state.domain:
-                continue
+        for rel_path in rel_paths:
             full_path = settings.BUNDLE_ROOT / rel_path
             if full_path.exists():
                 try:
